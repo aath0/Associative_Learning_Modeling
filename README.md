@@ -8,4 +8,5 @@ Functions to analyze and model skin conductance and pupil size response data dur
 
 * The anticipatory amplitude of PSR was estimated using single-trial general linear models (GLMs), with code that can be found [here](/RawDataAnalysis/compute_glm.m).
 
-
+### Modeling single-trial SCR & PSR
+* Trial-by-trial changes in anticipatory SCR & PSR can be modeled with several reinforcement learning and null models. The code for that can be found [here](/ModelingAnalysis/model_estimates.m).
