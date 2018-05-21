@@ -1,4 +1,4 @@
-# Associative_Learning_Modeling
+# Associative Learning Modeling of physiological responses
 Functions to analyze and model skin conductance and pupil size response data during fear conditioning experiments.
 
 ### Analysis of skin conductance & pupil size responses (SCR & PSR)
