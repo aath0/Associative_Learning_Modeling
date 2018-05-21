@@ -41,3 +41,38 @@ for p = 1:length(subj) % participants
         clear matlabbatch
     end
 end
+
+function [] = interpolate_PSR(data_path, output_path, subj)
+
+% Function that loops over imported PSR data
+% and interpolates missing points, e.g., due to eye blinks
+% data_path: the path with data for all participants
+% output_path: the path where data for all participants are stored
+% subj: an 1 x n array of participant IDs, n = number of participants
+
+for p = 1:length(subj)              
+    s_id = num2str(subj(p));
+    for q = 1:length(day)         
+        d_id = num2str(day(q));
+        file = [data_path, 'tscr_pu', s_id, 'b', d_id, '.mat'];
+        [~, name, ~] = fileparts(file);
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.datafile = {file};
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.eyes = 'all';
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.box_degree = 5;
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.distance = 700;
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.screen_settings.aspect_actual = [16 9];
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.screen_settings.aspect_used = [16 9];
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.screen_settings.screen_size = [21];
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.validate_fixations.enable_fixation_validation.fixation_point.default = 1;
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.channels = 'pupil';
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.interpolate.enable_interpolation = 1;
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.missing.enable_missing = 1;
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.output_settings.file_output.new_file.file_path = {output_path};
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.output_settings.file_output.new_file.file_name = ['fi', name,'.mat'];
+        matlabbatch{1}.pspm{1}.data_preprocessing{1}.pp_pupil{1}.find_valid_fixations.output_settings.channel_output.add_channel = 0;
+        cfg_util('initjob', matlabbatch);
+        cfg_util('run', matlabbatch);
+        cfg_util('deljob', matlabbatch);
+        clear matlabbatch
+    end
+end
